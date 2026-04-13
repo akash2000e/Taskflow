@@ -57,7 +57,7 @@ const PRIORITY_OPTIONS = [
 ]
 
 export default function TaskForm({ task, onClose, defaultProjectId }) {
-  const { projects, addTask, updateTask } = useStore()
+  const { projects, addTask, updateTask, deleteTask } = useStore()
   const isEdit = Boolean(task)
 
   const [form, setForm] = useState(() => {
@@ -119,7 +119,7 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px]"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px] pb-[5.5rem] sm:pb-0"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-[#1C1C1C] w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -232,6 +232,22 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
 
         {/* Footer */}
         <div className="flex gap-2 px-5 py-4 border-t border-border sticky bottom-0 bg-[#1C1C1C]">
+          {isEdit && (
+            <button
+              onClick={() => {
+                if (window.confirm('Delete this task?')) {
+                  deleteTask(task.id)
+                  onClose()
+                }
+              }}
+              className="shrink-0 border border-[#5A2020] text-sm rounded-xl px-3 py-2 text-[#E87060] hover:bg-[#3D1A1A] transition-colors"
+              title="Delete task"
+            >
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+            </button>
+          )}
           <button onClick={onClose}
             className="flex-1 border border-border text-sm rounded-xl py-2 text-[#6B6B6B] hover:bg-[#252525] hover:text-[#9A9A9A] transition-colors">
             Cancel

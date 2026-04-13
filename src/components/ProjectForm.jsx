@@ -74,7 +74,7 @@ export default function ProjectForm({ project, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px]"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px] pb-[5.5rem] sm:pb-0"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-[#1C1C1C] w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl max-h-[90vh] overflow-y-auto">
