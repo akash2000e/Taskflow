@@ -64,7 +64,7 @@ export default function Help() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen pt-14 pb-32 px-4 sm:px-8">
+    <div className="min-h-screen px-4 sm:px-6">
       <div className="max-w-2xl mx-auto mt-6">
 
         {/* Back button */}

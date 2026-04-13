@@ -74,23 +74,23 @@ export default function NavBar() {
   return (
     <>
       {/* Single centered row: add button + nav pill */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
+      <div className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
 
-        {/* Add button — collinear but distinct color */}
+        {/* Add button — icon-only on mobile, icon+label on sm+ */}
         <button
           onClick={handleAdd}
           title={label}
-          className="flex items-center gap-2 px-4 h-[52px] rounded-2xl
+          className="flex items-center justify-center gap-2 px-3 sm:px-4 h-[52px] w-[52px] sm:w-auto rounded-2xl
             bg-[#1E2D3D] border border-[#2A4060]
             text-[#7AADCF] text-sm font-medium
             hover:bg-[#243548] hover:border-[#3A5878] hover:text-[#9CC4E0]
-            shadow-2xl backdrop-blur-md transition-colors"
+            active:opacity-80 shadow-2xl backdrop-blur-md transition-colors"
         >
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
-          {label}
+          <span className="hidden sm:inline">{label}</span>
         </button>
 
         {/* Nav pill */}

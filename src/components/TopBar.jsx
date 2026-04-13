@@ -4,7 +4,7 @@ export default function TopBar() {
   const { saving } = useStore()
 
   return (
-    <header className="fixed top-0 left-0 z-40 flex items-center gap-2 px-5 py-3.5">
+    <header className="fixed top-0 left-0 right-0 z-40 flex items-center gap-2 px-5 py-3.5" style={{ paddingTop: 'max(0.875rem, env(safe-area-inset-top))' }}>
       <svg width="19" height="19" viewBox="0 0 32 32" fill="none" className="shrink-0">
         <rect width="32" height="32" rx="6" fill="#5E8CD6"/>
         <path d="M8 10h16M8 16h10M8 22h12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>

@@ -38,7 +38,7 @@ export default function Dashboard() {
     .slice(0, 9)
 
   return (
-    <div className="min-h-screen pt-14 pb-32 px-4 sm:px-8">
+    <div className="min-h-screen px-4 sm:px-6">
       <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
 
         {/* Metric windows */}
@@ -81,11 +81,12 @@ export default function Dashboard() {
                 const project = projects.find(p => p.id === task.project_id)
                 const { text: timeText, color: timeColor } = timeLabel(task, projects)
                 return (
-                  <div key={task.id} className="flex items-center gap-2.5 py-2.5 border-b border-border last:border-0">
+                  <div key={task.id} className="flex items-start gap-2.5 py-2.5 border-b border-border last:border-0">
                     <button
                       onClick={() => toggleDone(task.id)}
-                      className={`w-4 h-4 shrink-0 rounded border flex items-center justify-center transition-colors
+                      className={`mt-0.5 shrink-0 rounded border flex items-center justify-center transition-colors active:opacity-70
                         ${task.done ? 'bg-[#5E8CD6] border-[#5E8CD6]' : 'border-[#444] hover:border-[#5E8CD6]'}`}
+                      style={{ width: 20, height: 20, minWidth: 20 }}
                     >
                       {task.done && (
                         <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
@@ -93,18 +94,22 @@ export default function Dashboard() {
                         </svg>
                       )}
                     </button>
-                    <span
-                      className="flex-1 text-sm text-[#CFCFCE] cursor-pointer hover:text-[#5E8CD6] min-w-0 truncate"
-                      onClick={() => { setEditTask(task); setShowTaskForm(true) }}
-                    >
-                      {task.title}
-                    </span>
-                    {project && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#252525] text-[#6B6B6B] shrink-0">
-                        {project.name}
+                    <div className="flex-1 min-w-0">
+                      <span
+                        className="block text-sm text-[#CFCFCE] cursor-pointer hover:text-[#5E8CD6] leading-snug"
+                        onClick={() => { setEditTask(task); setShowTaskForm(true) }}
+                      >
+                        {task.title}
                       </span>
-                    )}
-                    <span className="text-[10px] font-mono shrink-0" style={{ color: timeColor }}>{timeText}</span>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {project && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#252525] text-[#6B6B6B]">
+                            {project.name}
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono" style={{ color: timeColor }}>{timeText}</span>
+                      </div>
+                    </div>
                   </div>
                 )
               })}

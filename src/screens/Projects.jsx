@@ -107,7 +107,7 @@ export default function Projects() {
   const visible = projects.filter(p => !p.archived)
 
   return (
-    <div className="min-h-screen pt-14 pb-32 px-4 sm:px-8">
+    <div className="min-h-screen px-4 sm:px-6">
       <div className="max-w-5xl mx-auto mt-5">
         <div className="flex items-center justify-between mb-4">
           <span className="text-[11px] font-semibold text-[#4A4A4A] uppercase tracking-wider">Projects</span>

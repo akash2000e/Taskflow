@@ -67,7 +67,7 @@ function AppShell() {
   return (
     <div className="min-h-screen bg-surface">
       <TopBar />
-      <main>
+      <main className="pb-32" style={{ paddingTop: 'max(3rem, calc(env(safe-area-inset-top) + 2.5rem))' }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<AllTasks />} />

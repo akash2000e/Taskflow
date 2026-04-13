@@ -17,12 +17,12 @@ export default function TaskItem({ task, onEdit, showPin = true }) {
       className={`flex items-start gap-3 py-3 border-b border-border last:border-0
         ${task.done ? 'opacity-30' : ''}`}
     >
-      {/* Checkbox */}
+      {/* Checkbox — wrapped in a larger tap area for mobile */}
       <button
         onClick={() => toggleDone(task.id)}
-        className={`mt-0.5 shrink-0 rounded border flex items-center justify-center transition-colors
+        className={`mt-0.5 shrink-0 rounded border flex items-center justify-center transition-colors active:opacity-70
           ${task.done ? 'bg-[#5E8CD6] border-[#5E8CD6]' : 'border-[#444] hover:border-[#5E8CD6]'}`}
-        style={{ width: 17, height: 17 }}
+        style={{ width: 20, height: 20, minWidth: 20 }}
       >
         {task.done && (
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -65,7 +65,7 @@ export default function TaskItem({ task, onEdit, showPin = true }) {
         <button
           onClick={() => togglePin(task.id)}
           title={task.today_flag ? 'Unpin from today' : 'Pin to today'}
-          className={`shrink-0 text-[10px] px-2 py-1 rounded-lg border transition-colors
+          className={`shrink-0 text-[11px] px-2.5 py-1.5 rounded-lg border transition-colors active:opacity-70
             ${task.today_flag
               ? 'bg-[#1A2A3D] border-[#2A4060] text-[#5E8CD6]'
               : 'border-border text-[#4A4A4A] hover:border-[#3A5070] hover:text-[#5E8CD6]'
