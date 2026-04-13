@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { saveConfig, testConnection } from '../github'
+import { saveConfig, clearConfig, testConnection, getConfig, isConfigured } from '../github'
 import { useStore } from '../store'
 
 const inputCls = 'w-full bg-[#191919] border border-border rounded-lg px-3 py-2 text-sm text-[#CFCFCE] placeholder-[#4A4A4A] focus:outline-none focus:ring-1 focus:ring-[#5E8CD6] focus:border-[#5E8CD6]'
@@ -10,12 +10,16 @@ export default function Setup() {
   const navigate = useNavigate()
   const { setConfigured, loadData } = useStore()
 
+  const alreadyConfigured = isConfigured()
+  const existingConfig = getConfig()
+
   const [username, setUsername] = useState('')
   const [repo, setRepo] = useState('')
   const [token, setToken] = useState('')
   const [showToken, setShowToken] = useState(false)
   const [testing, setTesting] = useState(false)
   const [result, setResult] = useState(null)
+  const [switching, setSwitching] = useState(false)
 
   async function handleTest() {
     if (!username || !repo || !token) {
@@ -27,13 +31,86 @@ export default function Setup() {
     saveConfig({ token, username, repo })
     const res = await testConnection()
     if (res.ok) {
-      setConfigured(true)
-      await loadData()
-      navigate('/')
+      window.location.href = window.location.origin + window.location.pathname + '#/'
     } else {
       setResult({ ok: false, error: res.error })
     }
     setTesting(false)
+  }
+
+  function handleDisconnect() {
+    clearConfig()
+    setConfigured(false)
+    setSwitching(false)
+    setResult(null)
+  }
+
+  // Already connected — show status card
+  if (alreadyConfigured && !switching) {
+    return (
+      <div className="min-h-screen bg-surface flex items-start justify-center pt-16 px-4">
+        <div className="w-full max-w-md flex flex-col gap-3">
+          <div className="flex items-center gap-2 mb-8">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="7" fill="#5E8CD6"/>
+              <path d="M8 10h16M8 16h10M8 22h12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+            </svg>
+            <span className="text-xl font-semibold text-[#CFCFCE]">Taskflow</span>
+          </div>
+
+          <div className="bg-card rounded-2xl border border-border p-6">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-9 h-9 rounded-full bg-[#102A18] border border-[#1E4A2E] flex items-center justify-center shrink-0">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5DAB7D" strokeWidth="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#5DAB7D]">Connected to GitHub</p>
+                <p className="text-xs text-[#4A4A4A]">Your credentials are saved in this browser</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2.5 mb-5">
+              <div className="flex items-center justify-between bg-[#191919] rounded-xl px-4 py-2.5 border border-border">
+                <span className="text-xs text-[#6B6B6B]">Username</span>
+                <span className="text-sm font-medium text-[#CFCFCE] font-mono">{existingConfig.username}</span>
+              </div>
+              <div className="flex items-center justify-between bg-[#191919] rounded-xl px-4 py-2.5 border border-border">
+                <span className="text-xs text-[#6B6B6B]">Repository</span>
+                <span className="text-sm font-medium text-[#CFCFCE] font-mono">{existingConfig.repo}</span>
+              </div>
+              <div className="flex items-center justify-between bg-[#191919] rounded-xl px-4 py-2.5 border border-border">
+                <span className="text-xs text-[#6B6B6B]">Token</span>
+                <span className="text-sm text-[#4A4A4A] font-mono">{'•'.repeat(12)}</span>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => navigate('/')}
+                className="flex-1 bg-[#2A3A52] hover:bg-[#334A68] border border-[#3A5070] text-[#8AB4D6] font-medium text-sm rounded-xl py-2.5 transition-colors"
+              >
+                Go to Dashboard
+              </button>
+              <button
+                onClick={() => setSwitching(true)}
+                className="px-4 bg-[#1E1E1E] hover:bg-[#252525] border border-border text-[#6B6B6B] hover:text-[#9A9A9A] font-medium text-sm rounded-xl py-2.5 transition-colors"
+              >
+                Switch
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={handleDisconnect}
+            className="text-xs text-[#4A4A4A] hover:text-[#E87060] transition-colors text-center py-1"
+          >
+            Disconnect and clear credentials
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -48,7 +125,7 @@ export default function Setup() {
         </div>
 
         <div className="bg-card rounded-2xl border border-border p-6">
-          <h1 className="text-base font-semibold text-[#CFCFCE] mb-1">Connect your GitHub repo</h1>
+          <h1 className="text-base font-semibold text-[#CFCFCE] mb-1">{switching ? 'Switch account' : 'Connect your GitHub repo'}</h1>
           <p className="text-sm text-[#4A4A4A] mb-6">
             Tasks are stored as <code className="font-mono bg-[#252525] px-1 rounded text-xs text-[#9A9A9A]">data/tasks.json</code> in a repo you own. Token stays in this browser only.
           </p>
@@ -95,10 +172,18 @@ export default function Setup() {
             </div>
           )}
 
-          <button onClick={handleTest} disabled={testing}
-            className="mt-5 w-full bg-[#2A3A52] hover:bg-[#334A68] border border-[#3A5070] disabled:opacity-50 text-[#8AB4D6] font-medium text-sm rounded-xl py-2.5 transition-colors">
-            {testing ? 'Testing connection…' : 'Test & connect'}
-          </button>
+          <div className="mt-5 flex gap-2">
+            {switching && (
+              <button onClick={() => setSwitching(false)}
+                className="px-4 bg-[#1E1E1E] hover:bg-[#252525] border border-border text-[#6B6B6B] font-medium text-sm rounded-xl py-2.5 transition-colors">
+                Cancel
+              </button>
+            )}
+            <button onClick={handleTest} disabled={testing}
+              className="flex-1 bg-[#2A3A52] hover:bg-[#334A68] border border-[#3A5070] disabled:opacity-50 text-[#8AB4D6] font-medium text-sm rounded-xl py-2.5 transition-colors">
+              {testing ? 'Testing connection…' : 'Test & connect'}
+            </button>
+          </div>
         </div>
 
         <div className="bg-card rounded-2xl border border-border p-5">
