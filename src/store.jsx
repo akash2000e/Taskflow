@@ -5,7 +5,7 @@ import { newId, slugify, toISODate } from './utils'
 // ─── PREVIEW MODE ───────────────────────────────────────────────────────────
 // Set to true to use the app without GitHub (data stored in memory only).
 // Set to false to use GitHub for persistent storage.
-const PREVIEW_MODE = true
+const PREVIEW_MODE = false
 // ────────────────────────────────────────────────────────────────────────────
 
 const EMPTY_DATA = {
