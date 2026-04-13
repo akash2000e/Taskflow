@@ -119,10 +119,10 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px] pb-28 sm:pb-0"
+      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-[3px] pb-36 sm:pb-0"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-[#1C1C1C] w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl max-h-[calc(100vh-7rem)] sm:max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#1C1C1C] w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl max-h-[calc(100vh-9rem)] sm:max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border sticky top-0 bg-[#1C1C1C] z-10">
