@@ -363,6 +363,57 @@ export default function Dashboard() {
     <div className="min-h-screen px-4 sm:px-6 pb-8">
       <div className="max-w-5xl mx-auto flex flex-col gap-4 mt-5">
 
+        {/* ── Project Progress (top of page) ── */}
+        <Window title="Project Tracking">
+          <div className="px-4 py-3">
+            {(() => {
+              const stats = projects
+                .map(p => {
+                  const pts = tasks.filter(t => t.project_id === p.id)
+                  const done = pts.filter(t => t.done).length
+                  return {
+                    ...p,
+                    total: pts.length,
+                    done,
+                    pct: pts.length ? Math.round((done / pts.length) * 100) : 0,
+                    logged_mins: p.logged_mins ?? 0,
+                  }
+                })
+                .filter(p => p.total > 0)
+                .sort((a, b) => b.pct - a.pct)
+
+              if (stats.length === 0) {
+                return <div className="text-xs text-[#4A4A4A]">No projects yet.</div>
+              }
+
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+                  {stats.map(p => (
+                    <div key={p.id}>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ background: p.color }} />
+                          <span className="text-[11px] text-[#CFCFCE] truncate">{p.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0 ml-2">
+                          {p.logged_mins > 0 && (
+                            <span className="text-[9px] font-mono text-[#4A4A4A]">{fmtMins(p.logged_mins)}</span>
+                          )}
+                          <span className="text-[10px] font-mono text-[#6B6B6B]">{p.done}/{p.total}</span>
+                          <span className="text-[10px] font-mono text-[#4A4A4A]">{p.pct}%</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-[#252525] overflow-hidden">
+                        <div className="h-full rounded-full transition-all" style={{ width: `${p.pct}%`, background: p.color }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
+          </div>
+        </Window>
+
         {/* ── Metric cards (Active · Done Today · Hours · Overdue) ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Window title="Active">
@@ -399,7 +450,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── Today + Priority + Project Progress + Streak ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Today strip */}
           <Window
             title="Today"
@@ -457,11 +508,6 @@ export default function Dashboard() {
             <div style={{ height: 130 }}>
               <PriorityDonut activeTasks={activeTasks} />
             </div>
-          </Window>
-
-          {/* Project progress */}
-          <Window title="Project Progress" className="sm:col-span-1">
-            <ProjectProgress projects={projects} tasks={tasks} />
           </Window>
 
           {/* Streak widget */}
