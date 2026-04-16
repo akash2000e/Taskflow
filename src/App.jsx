@@ -1,7 +1,9 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { StoreProvider, useStore } from './store'
+import { FocusProvider } from './FocusContext'
 import TopBar from './components/TopBar'
+import FocusBar from './components/FocusBar'
 import NavBar from './components/NavBar'
 import Dashboard from './screens/Dashboard'
 import AllTasks from './screens/AllTasks'
@@ -67,7 +69,9 @@ function AppShell() {
   return (
     <div className="min-h-screen bg-surface">
       <TopBar />
-      <main className="pb-32" style={{ paddingTop: 'max(3rem, calc(env(safe-area-inset-top) + 2.5rem))' }}>
+      <FocusBar />
+      {/* paddingTop accounts for TopBar (~48px) + FocusBar (40px) */}
+      <main className="pb-32" style={{ paddingTop: 'max(5.5rem, calc(env(safe-area-inset-top) + 5rem))' }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<AllTasks />} />
@@ -88,7 +92,9 @@ export default function App() {
     <HashRouter>
       <StoreProvider>
         <ToastProvider>
-          <AppShell />
+          <FocusProvider>
+            <AppShell />
+          </FocusProvider>
         </ToastProvider>
       </StoreProvider>
     </HashRouter>

@@ -74,7 +74,7 @@ export default function TaskItem({ task, onEdit, showPin = true }) {
         )}
 
         {/* Pin button */}
-        {showPin && !task.done && task.constraint === 'free' && (
+        {showPin && !task.done && (
           <button
             onClick={() => togglePin(task.id)}
             title={task.today_flag ? 'Unpin from today' : 'Pin to today'}

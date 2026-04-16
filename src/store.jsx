@@ -152,6 +152,7 @@ export function StoreProvider({ children }) {
       deadline: null,
       status: 'active',
       archived: false,
+      logged_mins: 0,
       ...projectFields,
       id,
     }
@@ -165,6 +166,17 @@ export function StoreProvider({ children }) {
     )
     const newData = { ...state.data, projects: newProjects }
     persist(newData, state.data, state.sha, `Update project: ${id}`)
+  }
+
+  function logTime(projectId, durationMins) {
+    if (!durationMins || durationMins <= 0) return
+    const newProjects = state.data.projects.map(p =>
+      p.id === projectId
+        ? { ...p, logged_mins: (p.logged_mins ?? 0) + durationMins }
+        : p
+    )
+    const newData = { ...state.data, projects: newProjects }
+    persist(newData, state.data, state.sha, `Log time: ${projectId} +${durationMins}m`)
   }
 
   function deleteProject(id) {
@@ -195,6 +207,7 @@ export function StoreProvider({ children }) {
     addProject,
     updateProject,
     deleteProject,
+    logTime,
     setConfigured,
     clearError,
   }

@@ -7,6 +7,7 @@ const EMPTY_TASK = {
   project_id: null,
   constraint: 'free',
   due_date: '',
+  start_date: '',
   priority: 'normal',
   estimate_hrs: '',
   progress: 0,
@@ -67,6 +68,7 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
         tags: Array.isArray(task.tags) ? task.tags.join(', ') : '',
         estimate_hrs: task.estimate_hrs ?? '',
         due_date: task.due_date ?? '',
+        start_date: task.start_date ?? '',
       }
     }
     return {
@@ -101,6 +103,7 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
       tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
       estimate_hrs: form.estimate_hrs !== '' ? parseFloat(form.estimate_hrs) : null,
       due_date: form.constraint === 'deadline' ? form.due_date : null,
+      start_date: form.start_date || null,
       project_id: form.type === 'project' ? form.project_id : null,
       progress: Number(form.progress),
     }
@@ -178,6 +181,14 @@ export default function TaskForm({ task, onClose, defaultProjectId }) {
               {errors.due_date && <p className="text-xs text-[#E87060] mt-1">{errors.due_date}</p>}
             </div>
           )}
+
+          {/* Start date */}
+          <div>
+            <label className={labelCls}>Start date <span className="text-[#4A4A4A] font-normal">(optional)</span></label>
+            <input type="date" value={form.start_date} onChange={e => set('start_date', e.target.value)}
+              className={inputCls}/>
+            <p className="text-[10px] text-[#4A4A4A] mt-1">When you plan to begin — used in the Gantt &amp; schedule charts</p>
+          </div>
 
           {/* Priority */}
           <div>
