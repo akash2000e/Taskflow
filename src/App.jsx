@@ -70,8 +70,8 @@ function AppShell() {
     <div className="min-h-screen bg-surface">
       <TopBar />
       <FocusBar />
-      {/* paddingTop accounts for TopBar (~48px) + FocusBar (40px) */}
-      <main className="pb-32" style={{ paddingTop: 'max(5.5rem, calc(env(safe-area-inset-top) + 5rem))' }}>
+      {/* paddingTop accounts for TopBar (~48px) + FocusBar (52px) */}
+      <main className="pb-32" style={{ paddingTop: 'max(6.5rem, calc(env(safe-area-inset-top) + 6rem))' }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<AllTasks />} />
