@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { StoreProvider, useStore } from './store'
 import { FocusProvider } from './FocusContext'
 import TopBar from './components/TopBar'
-import FocusBar from './components/FocusBar'
 import NavBar from './components/NavBar'
 import Dashboard from './screens/Dashboard'
 import AllTasks from './screens/AllTasks'
@@ -69,9 +68,8 @@ function AppShell() {
   return (
     <div className="min-h-screen bg-surface">
       <TopBar />
-      <FocusBar />
-      {/* paddingTop accounts for TopBar (~48px) + FocusBar (52px) */}
-      <main className="pb-32" style={{ paddingTop: 'max(6.5rem, calc(env(safe-area-inset-top) + 6rem))' }}>
+      {/* paddingTop accounts for TopBar (~48px) only */}
+      <main className="pb-32" style={{ paddingTop: 'max(3.5rem, calc(env(safe-area-inset-top) + 3rem))' }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<AllTasks />} />

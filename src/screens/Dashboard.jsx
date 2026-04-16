@@ -1,11 +1,110 @@
 import { useState, useMemo } from 'react'
 import { PieChart, Pie, Cell, Tooltip as ReTooltip, ResponsiveContainer } from 'recharts'
 import { useStore } from '../store'
+import { useFocus } from '../FocusContext'
 import { priorityScore, timeLabel, toISODate } from '../utils'
 import TaskItem from '../components/TaskItem'
 import TaskForm from '../components/TaskForm'
 import ScheduleChart from '../components/ScheduleChart'
 import GanttChart from '../components/GanttChart'
+
+function formatTime(seconds) {
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = seconds % 60
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+}
+
+function FocusSessionBox({ projects }) {
+  const { activeProjectId, elapsed, isPaused, isActive, switchProject, pauseSession, resumeSession, stopSession } = useFocus()
+  const activeProjects = projects.filter(p => p.status === 'active' && !p.archived)
+  const activeProject = projects.find(p => p.id === activeProjectId)
+
+  if (activeProjects.length === 0) return null
+
+  return (
+    <div className="bg-card border border-border rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+        <span className="text-[11px] font-semibold text-[#6B6B6B] uppercase tracking-wider">Focus Session</span>
+        {isActive && (
+          <div className="flex items-center gap-2.5">
+            {activeProject && (
+              <span className="text-[11px] font-medium truncate max-w-[120px]" style={{ color: activeProject.color }}>
+                {activeProject.name}
+              </span>
+            )}
+            {isPaused && (
+              <span className="text-[10px] text-[#4A4A4A] uppercase tracking-wider">paused</span>
+            )}
+            <span className={`font-mono text-[13px] tabular-nums ${isPaused ? 'text-[#3A3A38]' : 'text-[#CFCFCE]'}`}>
+              {formatTime(elapsed)}
+            </span>
+            <button
+              onClick={isPaused ? resumeSession : pauseSession}
+              title={isPaused ? 'Resume' : 'Pause'}
+              className="flex items-center justify-center w-7 h-7 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#CFCFCE] hover:border-[#444] transition-colors"
+            >
+              {isPaused ? (
+                <svg width="9" height="10" viewBox="0 0 8 9" fill="currentColor"><path d="M1 1.5L7 4.5L1 7.5V1.5Z"/></svg>
+              ) : (
+                <svg width="9" height="10" viewBox="0 0 8 9" fill="currentColor">
+                  <rect x="1" y="1" width="2" height="7" rx="0.5"/>
+                  <rect x="5" y="1" width="2" height="7" rx="0.5"/>
+                </svg>
+              )}
+            </button>
+            <button
+              onClick={stopSession}
+              title="Stop & save time"
+              className="flex items-center justify-center w-7 h-7 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#E87060] hover:border-[#5A2020] transition-colors"
+            >
+              <svg width="8" height="8" viewBox="0 0 7 7" fill="currentColor"><rect width="7" height="7" rx="1"/></svg>
+            </button>
+          </div>
+        )}
+        {!isActive && (
+          <span className="text-[11px] text-[#2A2A28]">click a project to start</span>
+        )}
+      </div>
+      <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        {activeProjects.map(p => {
+          const isSelected = activeProjectId === p.id
+          return (
+            <button
+              key={p.id}
+              onClick={() => switchProject(p.id)}
+              className="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 border"
+              style={isSelected ? {
+                background: `${p.color}22`,
+                borderColor: `${p.color}66`,
+                color: p.color,
+                boxShadow: `0 0 10px ${p.color}33`,
+              } : {
+                background: 'transparent',
+                borderColor: '#2A2A28',
+                color: '#4A4A4A',
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full shrink-0 transition-all"
+                style={{
+                  background: p.color,
+                  opacity: isSelected ? 1 : 0.35,
+                  boxShadow: isSelected ? `0 0 5px ${p.color}` : 'none',
+                }}
+              />
+              {p.name}
+              {isSelected && !isPaused && (
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse ml-0.5" />
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 function Window({ title, action, children, className = '' }) {
   return (
@@ -362,6 +461,9 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen px-4 sm:px-6 pb-8">
       <div className="max-w-5xl mx-auto flex flex-col gap-4 mt-5">
+
+        {/* ── Focus Session box ── */}
+        <FocusSessionBox projects={projects} />
 
         {/* ── Project Progress (top of page) ── */}
         <Window title="Project Tracking">
