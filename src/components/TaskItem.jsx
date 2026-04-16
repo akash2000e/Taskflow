@@ -14,7 +14,7 @@ export default function TaskItem({ task, onEdit, showPin = true }) {
 
   return (
     <div
-      className={`flex items-start gap-3 py-3 border-b border-border last:border-0
+      className={`flex items-start gap-3 py-3 px-3 border-b border-border last:border-0
         ${task.done ? 'opacity-30' : ''}`}
     >
       {/* Checkbox */}

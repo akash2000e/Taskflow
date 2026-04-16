@@ -5,7 +5,8 @@
       "Bash(npm install:*)",
       "Bash(npx tailwindcss:*)",
       "Bash(./node_modules/.bin/tailwindcss init:*)",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(node_modules/.bin/vite build:*)"
     ]
   }
 }
