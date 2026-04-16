@@ -25,30 +25,30 @@ function FocusSessionBox({ projects }) {
 
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
         <span className="text-[11px] font-semibold text-[#6B6B6B] uppercase tracking-wider">Focus Session</span>
         {isActive && (
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             {activeProject && (
-              <span className="text-[11px] font-medium truncate max-w-[120px]" style={{ color: activeProject.color }}>
+              <span className="text-[13px] font-medium truncate max-w-[150px]" style={{ color: activeProject.color }}>
                 {activeProject.name}
               </span>
             )}
             {isPaused && (
-              <span className="text-[10px] text-[#4A4A4A] uppercase tracking-wider">paused</span>
+              <span className="text-[11px] text-[#4A4A4A] uppercase tracking-wider">paused</span>
             )}
-            <span className={`font-mono text-[13px] tabular-nums ${isPaused ? 'text-[#3A3A38]' : 'text-[#CFCFCE]'}`}>
+            <span className={`font-mono text-[16px] tabular-nums ${isPaused ? 'text-[#3A3A38]' : 'text-[#CFCFCE]'}`}>
               {formatTime(elapsed)}
             </span>
             <button
               onClick={isPaused ? resumeSession : pauseSession}
               title={isPaused ? 'Resume' : 'Pause'}
-              className="flex items-center justify-center w-7 h-7 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#CFCFCE] hover:border-[#444] transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#CFCFCE] hover:border-[#444] transition-colors"
             >
               {isPaused ? (
-                <svg width="9" height="10" viewBox="0 0 8 9" fill="currentColor"><path d="M1 1.5L7 4.5L1 7.5V1.5Z"/></svg>
+                <svg width="10" height="11" viewBox="0 0 8 9" fill="currentColor"><path d="M1 1.5L7 4.5L1 7.5V1.5Z"/></svg>
               ) : (
-                <svg width="9" height="10" viewBox="0 0 8 9" fill="currentColor">
+                <svg width="10" height="11" viewBox="0 0 8 9" fill="currentColor">
                   <rect x="1" y="1" width="2" height="7" rx="0.5"/>
                   <rect x="5" y="1" width="2" height="7" rx="0.5"/>
                 </svg>
@@ -57,29 +57,29 @@ function FocusSessionBox({ projects }) {
             <button
               onClick={stopSession}
               title="Stop & save time"
-              className="flex items-center justify-center w-7 h-7 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#E87060] hover:border-[#5A2020] transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#2A2A28] text-[#4A4A4A] hover:text-[#E87060] hover:border-[#5A2020] transition-colors"
             >
-              <svg width="8" height="8" viewBox="0 0 7 7" fill="currentColor"><rect width="7" height="7" rx="1"/></svg>
+              <svg width="9" height="9" viewBox="0 0 7 7" fill="currentColor"><rect width="7" height="7" rx="1"/></svg>
             </button>
           </div>
         )}
         {!isActive && (
-          <span className="text-[11px] text-[#2A2A28]">click a project to start</span>
+          <span className="text-[12px] text-[#3A3A38]">click a project to start</span>
         )}
       </div>
-      <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex items-center gap-3 px-5 py-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
         {activeProjects.map(p => {
           const isSelected = activeProjectId === p.id
           return (
             <button
               key={p.id}
               onClick={() => switchProject(p.id)}
-              className="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 border"
+              className="shrink-0 flex items-center gap-2.5 px-4 py-2 rounded-full text-[13px] font-medium transition-all duration-150 border"
               style={isSelected ? {
                 background: `${p.color}22`,
                 borderColor: `${p.color}66`,
                 color: p.color,
-                boxShadow: `0 0 10px ${p.color}33`,
+                boxShadow: `0 0 12px ${p.color}33`,
               } : {
                 background: 'transparent',
                 borderColor: '#2A2A28',
@@ -87,16 +87,16 @@ function FocusSessionBox({ projects }) {
               }}
             >
               <span
-                className="w-2 h-2 rounded-full shrink-0 transition-all"
+                className="w-2.5 h-2.5 rounded-full shrink-0 transition-all"
                 style={{
                   background: p.color,
                   opacity: isSelected ? 1 : 0.35,
-                  boxShadow: isSelected ? `0 0 5px ${p.color}` : 'none',
+                  boxShadow: isSelected ? `0 0 6px ${p.color}` : 'none',
                 }}
               />
               {p.name}
               {isSelected && !isPaused && (
-                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse ml-0.5" />
+                <span className="w-2 h-2 rounded-full bg-current animate-pulse ml-0.5" />
               )}
             </button>
           )
@@ -136,15 +136,15 @@ function PriorityDonut({ activeTasks }) {
   }
 
   return (
-    <div className="flex items-center gap-4 h-full px-4 py-3">
-      <ResponsiveContainer width={90} height={90}>
+    <div className="flex items-center gap-3 h-full px-3 py-2">
+      <ResponsiveContainer width={66} height={66}>
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={26}
-            outerRadius={42}
+            innerRadius={18}
+            outerRadius={30}
             paddingAngle={2}
             dataKey="value"
             stroke="none"
@@ -159,12 +159,12 @@ function PriorityDonut({ activeTasks }) {
           />
         </PieChart>
       </ResponsiveContainer>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1">
         {data.map(d => (
-          <div key={d.name} className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full shrink-0" style={{ background: d.color }} />
-            <span className="text-[11px] text-[#6B6B6B]">{d.name}</span>
-            <span className="text-[11px] font-mono text-[#CFCFCE] ml-auto pl-3">{d.value}</span>
+          <div key={d.name} className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: d.color }} />
+            <span className="text-[10px] text-[#6B6B6B]">{d.name}</span>
+            <span className="text-[10px] font-mono text-[#CFCFCE] ml-auto pl-2">{d.value}</span>
           </div>
         ))}
       </div>
@@ -296,22 +296,22 @@ function StreakWidget({ tasks }) {
 
   return (
     <Window title="Streak">
-      <div className="px-4 py-3 flex flex-col h-full">
-        <div className="flex items-baseline gap-1.5 mb-3">
-          <span className={`text-3xl font-semibold font-mono ${streak > 0 ? 'text-[#4CAF82]' : 'text-[#CFCFCE]'}`}>
+      <div className="px-3 py-2 flex items-center gap-3 h-full">
+        <div className="flex items-baseline gap-1 shrink-0">
+          <span className={`text-2xl font-semibold font-mono ${streak > 0 ? 'text-[#4CAF82]' : 'text-[#CFCFCE]'}`}>
             {streak}
           </span>
-          <span className="text-xs text-[#4A4A4A]">day{streak !== 1 ? 's' : ''}</span>
-          {streak > 0 && <span className="text-[10px] text-[#4CAF82] ml-1">🔥</span>}
+          <span className="text-[10px] text-[#4A4A4A]">d</span>
+          {streak > 0 && <span className="text-[10px] ml-0.5">🔥</span>}
         </div>
 
         {/* Mini bar chart */}
-        <div className="flex items-end gap-1 flex-1" style={{ minHeight: 44 }}>
+        <div className="flex items-end gap-0.5 flex-1" style={{ height: 32 }}>
           {last7.map((d, i) => {
             const isToday = i === 6
-            const barH = d.count > 0 ? Math.max((d.count / maxCount) * 36, 8) : 4
+            const barH = d.count > 0 ? Math.max((d.count / maxCount) * 24, 6) : 3
             return (
-              <div key={d.dateStr} className="flex-1 flex flex-col items-center gap-1">
+              <div key={d.dateStr} className="flex-1 flex flex-col items-center gap-0.5">
                 <div
                   className="w-full rounded-sm transition-all duration-300"
                   style={{
@@ -319,11 +319,11 @@ function StreakWidget({ tasks }) {
                     background: d.count > 0
                       ? (isToday ? '#4CAF82' : 'rgba(76,175,130,0.5)')
                       : '#252525',
-                    minHeight: 4,
+                    minHeight: 3,
                   }}
                   title={`${d.count} task${d.count !== 1 ? 's' : ''} on ${d.dateStr}`}
                 />
-                <span className={`text-[8px] font-mono ${isToday ? 'text-[#6B6B6B]' : 'text-[#3A3A38]'}`}>
+                <span className={`text-[7px] font-mono ${isToday ? 'text-[#6B6B6B]' : 'text-[#3A3A38]'}`}>
                   {d.label}
                 </span>
               </div>
@@ -467,7 +467,7 @@ export default function Dashboard() {
 
         {/* ── Project Progress (top of page) ── */}
         <Window title="Project Tracking">
-          <div className="px-4 py-3">
+          <div className="px-4 py-2">
             {(() => {
               const stats = projects
                 .map(p => {
@@ -489,23 +489,17 @@ export default function Dashboard() {
               }
 
               return (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
                   {stats.map(p => (
                     <div key={p.id}>
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="w-2 h-2 rounded-full shrink-0" style={{ background: p.color }} />
-                          <span className="text-[11px] text-[#CFCFCE] truncate">{p.name}</span>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <div className="flex items-center gap-1 min-w-0">
+                          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.color }} />
+                          <span className="text-[10px] text-[#CFCFCE] truncate">{p.name}</span>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0 ml-2">
-                          {p.logged_mins > 0 && (
-                            <span className="text-[9px] font-mono text-[#4A4A4A]">{fmtMins(p.logged_mins)}</span>
-                          )}
-                          <span className="text-[10px] font-mono text-[#6B6B6B]">{p.done}/{p.total}</span>
-                          <span className="text-[10px] font-mono text-[#4A4A4A]">{p.pct}%</span>
-                        </div>
+                        <span className="text-[9px] font-mono text-[#6B6B6B] ml-1 shrink-0">{p.done}/{p.total}</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-[#252525] overflow-hidden">
+                      <div className="h-1 rounded-full bg-[#252525] overflow-hidden">
                         <div className="h-full rounded-full transition-all" style={{ width: `${p.pct}%`, background: p.color }} />
                       </div>
                     </div>
@@ -607,7 +601,7 @@ export default function Dashboard() {
 
           {/* Priority breakdown donut */}
           <Window title="Priority Breakdown" className="sm:col-span-1">
-            <div style={{ height: 130 }}>
+            <div style={{ height: 90 }}>
               <PriorityDonut activeTasks={activeTasks} />
             </div>
           </Window>
